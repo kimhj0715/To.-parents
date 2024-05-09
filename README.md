@@ -1,11 +1,11 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인터랙티브 메시지 애니메이션</title>
+    <title>메시지 순차적 표시</title>
     <style>
         body {
+            background-color: #87CEEB;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -13,9 +13,19 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
             overflow: hidden;
-            background-color: #87CEEB;
             transition: background-color 0.5s;
+        }
+        .messages {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            overflow: auto;
+            padding: 10px;
         }
         .message {
             background-color: #FFD700;
@@ -23,48 +33,42 @@
             padding: 8px 12px;
             margin: 5px;
             display: none;
-            width: auto;
             max-width: 80%;
             word-wrap: break-word;
-            position: absolute;
         }
         .input-area {
-            position: fixed;
-            bottom: 0;
             width: 100%;
-            background-color: #fff;
             padding: 10px;
             box-sizing: border-box;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         input[type="text"] {
-            width: 75%;
-            padding: 8px;
+            flex-grow: 1;
+            padding: 10px;
             border: 2px solid #ddd;
             border-radius: 5px;
-            margin-right: 5px;
+            margin-right: 10px;
         }
         button {
-            width: 20%;
+            padding: 10px 20px;
             background-color: #87CEEB;
             border: none;
-            padding: 10px;
-            border-radius: 5px;
             color: white;
+            border-radius: 5px;
+            font-size: 16px;
         }
         #heart {
             display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             font-size: 50px;
             color: #FF1493;
         }
     </style>
 </head>
 <body>
-<div id="heart">❤️</div>
-<div class="container">
+<div class="messages" id="message-container">
     <div class="message">엄마</div>
     <div class="message">아빠</div>
     <div class="message">키워 주셔서</div>
@@ -82,20 +86,22 @@
     <input type="text" placeholder="메시지 입력...">
     <button>전송</button>
 </div>
+<div id="heart">❤️</div>
 
 <script>
     const messages = document.querySelectorAll('.message');
     let currentMessage = 0;
     const body = document.body;
     const heart = document.getElementById('heart');
+    const container = document.getElementById('message-container');
 
     function showNextMessage() {
         if (currentMessage < messages.length) {
             messages[currentMessage].style.display = 'block';
             currentMessage++;
         } else {
-            messages.forEach(msg => msg.style.display = 'none');
             body.style.backgroundColor = '#FFB6C1';
+            container.style.display = 'none';
             heart.style.display = 'block';
         }
     }
